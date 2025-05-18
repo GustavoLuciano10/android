@@ -1,20 +1,18 @@
-version: '3.7'
+# Use como base a imagem oficial do projeto
+FROM budtmo/docker-android-x86-11.0
 
-services:
-  android-emulator:
-    image: budtmo/docker-android-x86-11.0
-    container_name: android-emulator
-    privileged: true  # Necessário para rodar o emulador Android
-    ports:
-      - "6080:6080"   # Acesso via navegador (VNC)
-      - "4723:4723"   # Appium server
-      - "5554:5554"   # Android emulator console
-      - "5555:5555"   # ADB (Android Debug Bridge)
-    environment:
-      - DEVICE=Samsung Galaxy S6
-      - APPIUM=true
-      - AUTO_RECORD=false
-      - AUTO_SCREENSHOT=false
-      - EMULATOR_ARGS=-noaudio -no-boot-anim
-    volumes:
-      - /dev/shm:/dev/shm
+# Copie um APK para dentro do container (opcional)
+# COPY my-app.apk /root/
+
+# Variáveis de ambiente (opcionais, você também pode passá-las com docker run)
+ENV DEVICE="Samsung Galaxy S6"
+ENV APPIUM=true
+ENV AUTO_RECORD=false
+ENV AUTO_SCREENSHOT=false
+ENV EMULATOR_ARGS="-noaudio -no-boot-anim"
+
+# Exponha as portas necessárias
+EXPOSE 6080 4723 5554 5555
+
+# Comando padrão (mantém o container rodando)
+CMD ["/entrypoint.sh"]
